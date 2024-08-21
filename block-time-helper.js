@@ -7,8 +7,13 @@
 // @match        *://*.syscoin.org/blocks*
 // @icon         https://syscoin.org/images/favicon-32x32.png
 // @grant        none
-// @license      MIT
 // ==/UserScript==
+// @license      MIT
+
+// Frank-GER:
+// '@license' in header not allowed in Greasemonkey
+// added color to blocktime
+// bold only for blocktime >150s
 
 function calculateBlockTimeDiff(blockTime1, blockTime2) {
     const differenceInMilliseconds = Math.abs(blockTime2 - blockTime1);
@@ -46,7 +51,13 @@ function formatBlockTimeDiff(timeDiff) {
                     if (prevDate) {
                         let timeDiff = calculateBlockTimeDiff(currDate, prevDate);
                         let formattedDiff = formatBlockTimeDiff(timeDiff);
-                        prevEl.innerHTML += `<br /> <strong>${formattedDiff} min.</strong>`;
+                        if ((timeDiff/1000) <= 150) {
+                          prevEl.innerHTML += `<br /> <span style="color:#852a2a">${formattedDiff} min.</span>`;
+                        } else if ((timeDiff/1000) <= 300) {
+                          prevEl.innerHTML += `<br /> <span style="color:#852a2a"><strong>${formattedDiff} min.</strong></span>`;
+                        } else {
+                          prevEl.innerHTML += `<br /> <span style="color:#f00000"><strong>${formattedDiff} min.</strong></span>`;
+                        }
                     }
                 }
                 prevEl = tsEl;
